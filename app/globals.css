@@ -16,36 +16,45 @@
   }
 }
 
+h1 {
+  color: rgb(50, 3, 56);
+  font-size: 28px;
+  font-weight: bold;
+  margin: auto;
+  padding-bottom: 12px;
+}
+
+
 body {
-  color: rgb(var(--background-start-rgb));
   background: rgba(224, 224, 247, 0.751);
 }
 
 input,
 select {
-  background-color: rgba(0, 26, 255, 0.217);
-  border: 1px solid rgb(21, 0, 255);
+  background-color: rgba(82, 8, 85, 0.217);
+  border: 1px solid rgb(50, 3, 56);
   border-radius: 10px;
   padding: 10px;
   margin: 5px;
   outline: none;
 }
+
 input::placeholder,
 select::placeholder {
 color: black;
 }
 
 .submit-button {
-  background-color: rgba(0, 26, 255, 0.59);
+  background-color: rgba(54, 6, 45, 0.874);
+  color: white;
   border-radius: 10px;
   padding: 10px;
   margin-top: 10px;
   font-weight: bold;
-  color: rgb(var(--foreground-rgb)) ;
 }
 
 .submit-button:hover {
-  background-color: rgba(0, 26, 255, 0.217);
+  background-color: rgb(50, 3, 56);
 }
 
 .error-message {

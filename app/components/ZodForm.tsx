@@ -1,25 +1,61 @@
 import { useForm } from "react-hook-form";
-import { FormData } from "@/types/reactHookTypes";
+import { FormData, ValidFieldNames } from "@/types/reactHookTypes";
 import FormField from "./FormField";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UserSchema } from "@/types/React-Zod";
+import axios from "axios";
 
-const Form= () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset
-  } = useForm<FormData>();
+function ZodForm(){
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      setError,
+      reset
+    } = useForm<FormData>({
+      resolver: zodResolver(UserSchema),
+    });
 
-  const onSubmit = async (data: FormData) => {
-      console.log("SUCCESS", data);
-      reset()
-  }
+
+    const onSubmit = async (data: FormData) => {
+        try {
+          const response = await axios.post("/api/form", data); 
+          const { errors = {} } = response.data;
+    
+          
+          const fieldErrorMapping: Record<string, ValidFieldNames> = {
+            email: "email",
+            githubUrl: "githubUrl",
+            yearsOfExperience: "yearsOfExperience",
+            password: "password",
+            confirmPassword: "confirmPassword",
+          };
+    
+         
+          const fieldWithError = Object.keys(fieldErrorMapping).find(
+            (field) => errors[field]
+          );
+    
+         
+          if (fieldWithError) {
+            
+            setError(fieldErrorMapping[fieldWithError], {
+              type: "server",
+              message: errors[fieldWithError],
+            });
+          }
+          reset()
+        } catch (error) {
+          alert("Submitting form failed!");
+        }
+      };
+    
 
   return (
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid col-auto">
           <h1 className="text-3xl font-bold mb-4">
-            React-Hook-Form
+            Zod & React-Hook-Form
           </h1>
           <FormField
             type="email"
@@ -28,6 +64,7 @@ const Form= () => {
             register={register}
             error={errors.email}
           />
+
           <FormField
             type="text"
             placeholder="GitHub URL"
@@ -68,4 +105,4 @@ const Form= () => {
   );
 }
 
-export default Form;
+export default ZodForm;
